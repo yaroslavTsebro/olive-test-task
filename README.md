@@ -7,4 +7,10 @@ PUT locahost:3000/files/:key - multipart/form-data replaces file
 GET locahost:3000/files/:key - returns file
 DELETE locahost:3000/files/:key - deletes file
 
-if you want to 
+if you want to check my code style please check another test tasks:
+
+**1.https://github.com/yaroslavTsebro/weather-app**
+2.https://github.com/yaroslavTsebro/events-manager
+3.https://github.com/yaroslavTsebro/todo
+4.https://github.com/yaroslavTsebro/task-hub
+5.https://github.com/yaroslavTsebro/booking-manager
