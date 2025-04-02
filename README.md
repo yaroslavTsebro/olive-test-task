@@ -14,3 +14,6 @@ if you want to check my code style please check another test tasks:
 3.https://github.com/yaroslavTsebro/todo
 4.https://github.com/yaroslavTsebro/task-hub
 5.https://github.com/yaroslavTsebro/booking-manager
+
+
+Also, I have written almost the same server using Nest.js + Fastify (including "manual" multipart parsing) for my previous project. I can send you a link to it if you want.
