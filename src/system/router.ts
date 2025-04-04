@@ -1,13 +1,17 @@
 import { IncomingMessage, ServerResponse } from 'http';
 
 type RouteHandler = (req: IncomingMessage, res: ServerResponse, params?: Record<string, string>) => void;
-type Middleware = (req: IncomingMessage, res: ServerResponse, next: Function) => void;
+
+export type NextFunction = () => void;
+
+export type Middleware = (req: IncomingMessage, res: ServerResponse, next: NextFunction) => void;
 
 type RouteMap = Map<string, Map<string, { handler: RouteHandler, middlewares: Middleware[], regex: RegExp }>>;
 
 const pathToRegex = (path: string) => new RegExp(
   `^${path.replace(/:([^/]+)/g, '(?<$1>[^/]+)')}$`
 );
+
 
 class Router {
   private routes: RouteMap;
@@ -50,7 +54,7 @@ class Router {
   public handle(req: IncomingMessage, res: ServerResponse): void {
     const method = req.method || '';
     const url = new URL(req.url || '', `http://${req.headers.host}`);
-    const path = url.pathname;
+    const path = decodeURIComponent(url.pathname);
 
     const routeEntries = this.routes.get(method);
     if (!routeEntries) {
@@ -59,10 +63,22 @@ class Router {
     }
 
     for (const [routePath, { handler, middlewares, regex }] of routeEntries.entries()) {
-      const match = path.match(regex);
+      const match = regex.exec(path);
 
       if (match) {
-        const params = match.groups || {};
+        const params: Record<string, string> = {};
+
+        if (regex.exec(path)?.groups) {
+          Object.assign(params, match.groups);
+        } else {
+          const paramNames = Array.from(routePath.matchAll(/:([^/]+)/g)).map(m => m[1]);
+          const paramValues = match.slice(1);
+
+          paramNames.forEach((name, index) => {
+            params[name] = paramValues[index];
+          });
+        }
+
         (req as any).params = params;
 
         let middlewareIndex = 0;
@@ -96,6 +112,7 @@ class Router {
 
     this.sendResponse(res, 404, { error: 'Route not found' });
   }
+
 
   private sendResponse(res: ServerResponse, statusCode: number, message: object): void {
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });

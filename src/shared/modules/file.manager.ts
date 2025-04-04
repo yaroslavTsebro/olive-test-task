@@ -1,8 +1,9 @@
 import { Readable } from 'stream';
 
 export interface IUploadFile {
-  data: Readable;
+  name: string;
   contentType: string;
+  data: Readable;
 }
 
 export interface IFileManagerService {

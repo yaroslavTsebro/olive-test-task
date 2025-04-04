@@ -6,7 +6,7 @@ import { multipartParser } from '../middlewares/multipart-parser';
 class RouteManager {
 
     public initializeRoutes() {
-        router.post('/files/upload', fileController.upload.bind(fileController), [multipartParser, validateContentTypeMiddleware]);
+        router.post('/files', fileController.upload.bind(fileController), [multipartParser, validateContentTypeMiddleware]);
         router.put('/files/:key', fileController.replace.bind(fileController), [multipartParser, validateContentTypeMiddleware]);
         router.get('/files/:key', fileController.retrieve.bind(fileController));
         router.delete('/files/:key', fileController.delete.bind(fileController));

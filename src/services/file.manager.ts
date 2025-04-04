@@ -29,11 +29,10 @@ class FileManagerService implements IFileManagerService {
   }
 
   private async uploadSingleFile(file: IUploadFile): Promise<string> {
-    const fileName = this.cryptoService.generateUUID();
 
     const params = {
       Bucket: bucketName,
-      Key: fileName,
+      Key: file.name,
       Body: file.data,
       ContentType: file.contentType,
     };

@@ -70,7 +70,7 @@ class FileController {
 
   public async delete(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const key = (req as any).params.key;
-    
+
     if (!key) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Missing key parameter' }));
